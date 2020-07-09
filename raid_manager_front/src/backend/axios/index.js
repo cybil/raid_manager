@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = 'http://localhost:3000'
+// const API_URL = 'http://localhost:3000'
+const API_URL = 'http://wow-raid-manager.herokuapp.com'
 
 const securedAxiosInstance = axios.create({
   baseURL: API_URL,
