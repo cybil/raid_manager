@@ -26,6 +26,7 @@ module Api
       # POST /characters
       def create
         @character = current_user.characters.build(character_params)
+        @character.roles = params[:character][:roles]
 
         if @character.save
           render json: @character, status: :created

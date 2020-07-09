@@ -5,11 +5,12 @@
     </div>
 
     <div class="flex flex-items-center">
-      <router-link v-if="!signedIn()" to="/signin" class="nav-link">Sign In</router-link>
-      <router-link v-if="!signedIn()" to="/signup" class="nav-link">Sign Up</router-link>
-      <router-link v-if="signedIn()" to="/characters" class="nav-link">Characters</router-link>
-      <router-link v-if="signedIn()" to="/roosters" class="nav-link">Roosters</router-link>
-      <a v-if="signedIn()" href="javascript:void(0);" @click.prevent="signOut" class="nav-link">Sign out</a>
+      <router-link v-if="!isSignedIn()" to="/signin" class="nav-link">Sign In</router-link>
+      <router-link v-if="!isSignedIn()" to="/signup" class="nav-link">Sign Up</router-link>
+      <router-link v-if="isSignedIn()" to="/characters" class="nav-link">Characters</router-link>
+      <router-link v-if="isSignedIn()" to="/rosters" class="nav-link">Rosters</router-link>
+      <router-link v-if="isSignedIn()" to="/basic-compos" class="nav-link">Basic compos</router-link>
+      <a v-if="isSignedIn()" href="javascript:void(0);" @click.prevent="signOut" class="nav-link">Sign out</a>
 
       <div class="nav-link">
         {{currentUser}}
@@ -31,6 +32,9 @@ export default {
     }
   },
   methods: {
+    isSignedIn () {
+      return localStorage.signedIn
+    },
     setError (error, text) {
       this.error = (error.response && error.response.data && error.response.data.error) || text
     },
@@ -41,7 +45,8 @@ export default {
       this.$http.secured.delete('/signout')
         .then(response => {
           delete localStorage.csrf
-          delete localStorage.signedIn
+          delete localStorage.email
+          localStorage.signedIn = false
           this.$router.replace('/')
         })
         .catch(error => this.setError(error, 'Cannot sign out'))

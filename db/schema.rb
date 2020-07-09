@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_07_001940) do
+ActiveRecord::Schema.define(version: 2020_07_08_170052) do
+
+  create_table "basic_compos", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.json "template", default: {}, null: false
+  end
+
+  create_table "character_roster_roles", force: :cascade do |t|
+    t.integer "character_id"
+    t.integer "roster_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "slot_id"
+    t.index ["character_id"], name: "index_character_roster_roles_on_character_id"
+    t.index ["roster_id"], name: "index_character_roster_roles_on_roster_id"
+  end
 
   create_table "characters", force: :cascade do |t|
     t.string "name"
@@ -19,13 +36,16 @@ ActiveRecord::Schema.define(version: 2020_07_07_001940) do
     t.datetime "updated_at", null: false
     t.string "race"
     t.string "ch_class"
+    t.text "roles"
     t.index ["user_id"], name: "index_characters_on_user_id"
   end
 
-  create_table "roosters", force: :cascade do |t|
+  create_table "rosters", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "size"
+    t.json "template", default: {}, null: false
   end
 
   create_table "users", force: :cascade do |t|

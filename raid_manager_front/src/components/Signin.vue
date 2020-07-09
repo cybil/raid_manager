@@ -66,7 +66,9 @@ export default {
     signinFailed (error) {
       this.error = (error.response && error.response.data && error.response.data.error) || ''
       delete localStorage.csrf
-      delete localStorage.signedIn
+      delete localStorage.email
+      // delete localStorage.signedIn
+      localStorage.signedIn = false
     },
     checkSignedIn () {
       if (localStorage.signedIn) {
