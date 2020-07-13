@@ -14,15 +14,17 @@ class SignupController < ApplicationController
         secure: Rails.env.production?
       )
 
-      render json: { csrf: tokens[:csrf], email: user.email }
+      render json: { csrf: tokens[:csrf], user: user }
     else
       render json: { error: user.errors.full_messages.join(' ') }, status: :unprocessable_entity
     end
+  rescue => e
+    render json: { error: e }, status: 500
   end
 
   private
 
   def user_params
-    params.permit(:name, :email, :password, :password_confirmation)
+    params.permit(:name, :password, :password_confirmation)
   end
 end

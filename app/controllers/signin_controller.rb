@@ -2,9 +2,9 @@ class SigninController < ApplicationController
   before_action :authorize_access_request!, only: :destroy
 
   def create
-    user = User.find_by email: params[:email]
+    user = User.find_by name: params[:name]
 
-    if user.authenticate(params[:password])
+    if user&.authenticate(params[:password])
       payload = { user_id: user.id }
       session = JWTSessions::Session.new(payload: payload, refresh_by_access_allowed: true)
       tokens = session.login
@@ -14,10 +14,12 @@ class SigninController < ApplicationController
         httponly: true,
         secure: Rails.env.production?
       )
-      render json: { csrf: tokens[:csrf], email: user.email }
+      render json: { csrf: tokens[:csrf], user: user }
     else
       not_found
     end
+  rescue => e
+    render json: { error: e }, status: 500
   end
 
   def destroy
@@ -29,6 +31,6 @@ class SigninController < ApplicationController
   private
 
   def not_found
-    render json: { error: 'Cannot find email/password combination' }, status: :not_found
+    render json: { error: 'Cannot find name/password combination' }, status: :not_found
   end
 end
