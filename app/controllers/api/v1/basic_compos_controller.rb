@@ -40,7 +40,7 @@ module Api
       def update_slot
         @basic_compo.template[params[:slot_id].to_s]['ch_class'] = params[:ch_class] if params[:ch_class].present?
         @basic_compo.template[params[:slot_id].to_s]['role'] = params[:role] if params[:role].present?
-        @basic_compo.template[params[:slot_id].to_s]['goal'] = params[:goal] || @basic_compo.template[params[:slot_id].to_s]['role']
+        @basic_compo.template[params[:slot_id].to_s]['goal'] = params[:goal].presence || @basic_compo.template[params[:slot_id].to_s]['role']
 
         if @basic_compo.save
           render json: @basic_compo
